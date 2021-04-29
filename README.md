@@ -15,7 +15,7 @@ Go to [here](src/main/resources/config/application.yml) to change your testing d
 ```yaml
 spring:
   profiles:
-    # dev h2 mssql mysql postgresql
+    # h2 mysql postgresql sqlserver
     active: h2
 ```
 
