@@ -29,13 +29,13 @@ spring:
 
 Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
 
-| Isolation Level | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update | Write Skew |
-| --------------- | ---------- | ----------------- | ------------ | ----------- | ---------- |
-| DEFAULT         | not occur  | may occur         | may occur    | may occur   | ?          |
-| READ_UNCOMMITTED| may occur  | may occur         | may occur    | may occur   | ?          |
-| READ_COMMITTED  | not occur  | may occur         | may occur    | may occur   | ?          |
-| REPEATABLE_READ | not occur  | not occur         | not occur    | may occur   | ?          |
-| SERIALIZABLE    | not occur  | not occur         | not occur    | may occur   | ?          |
+| Isolation Level | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
+| --------------- | ---------- | ----------------- | ------------ | ----------- |
+| DEFAULT         | not occur  | may occur         | may occur    | may occur   |
+| READ_UNCOMMITTED| may occur  | may occur         | may occur    | may occur   |
+| READ_COMMITTED  | not occur  | may occur         | may occur    | may occur   |
+| REPEATABLE_READ | not occur  | not occur         | not occur    | may occur   |
+| SERIALIZABLE    | not occur  | not occur         | not occur    | may occur   |
 
 ### MS SQL
 
@@ -46,13 +46,13 @@ Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
 `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level `Lost Update` need `@Retryable` to retry otherwise will throw `CannotAcquireLockException`.
 
 
-| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update | Write Skew |
-| ---------------- | ---------- | ----------------- | ------------ | ----------- | ---------- |
-| DEFAULT          | not occur  | may occur         | may occur    | may occur   | ?          |
-| READ_UNCOMMITTED | may occur  | may occur         | may occur    | may occur   | ?          |
-| READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   | ?          |
-| REPEATABLE_READ  | not occur  | not occur         | may occur    | not occur   | ?          |
-| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   | ?          |
+| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
+| ---------------- | ---------- | ----------------- | ------------ | ----------- |
+| DEFAULT          | not occur  | may occur         | may occur    | may occur   |
+| READ_UNCOMMITTED | may occur  | may occur         | may occur    | may occur   |
+| READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   |
+| REPEATABLE_READ  | not occur  | not occur         | may occur    | not occur   |
+| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
 ### MySQL
 
@@ -62,13 +62,13 @@ Isolation Level `DEFAULT` seems is equal `REPEATABLE_READ`.
 
 `SERIALIZABLE` in Isolation Level `Lost Update` need `@Retryable` to retry otherwise will throw `CannotAcquireLockException`.
 
-| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update | Write Skew |
-| ---------------- | ---------- | ----------------- | ------------ | ----------- | ---------- |
-| DEFAULT          | not occur  | not occur         | may occur    | may occur   | ?          |
-| READ_UNCOMMITTED | may occur  | may occur         | may occur    | may occur   | ?          |
-| READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   | ?          |
-| REPEATABLE_READ  | not occur  | not occur         | may occur    | may occur   | ?          |
-| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   | ?          |
+| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
+| ---------------- | ---------- | ----------------- | ------------ | ----------- |
+| DEFAULT          | not occur  | not occur         | may occur    | may occur   |
+| READ_UNCOMMITTED | may occur  | may occur         | may occur    | may occur   |
+| READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   |
+| REPEATABLE_READ  | not occur  | not occur         | may occur    | may occur   |
+| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
 ### PostgreSQL 
 
@@ -78,13 +78,13 @@ Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
 
 `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level `Lost Update` need `@Retryable` to retry otherwise will throw `CannotAcquireLockException`.
 
-| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update | Write Skew |
-| ---------------- | ---------- | ----------------- | ------------ | ----------- | ---------- |
-| DEFAULT          | not occur  | may occur         | may occur    | may occur   | ?          |
-| READ_UNCOMMITTED | not occur  | may occur         | may occur    | may occur   | ?          |
-| READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   | ?          |
-| REPEATABLE_READ  | not occur  | not occur         | not occur    | not occur   | ?          |
-| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   | ?          |
+| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
+| ---------------- | ---------- | ----------------- | ------------ | ----------- |
+| DEFAULT          | not occur  | may occur         | may occur    | may occur   |
+| READ_UNCOMMITTED | not occur  | may occur         | may occur    | may occur   |
+| READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   |
+| REPEATABLE_READ  | not occur  | not occur         | not occur    | not occur   |
+| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
 
 ## Reference

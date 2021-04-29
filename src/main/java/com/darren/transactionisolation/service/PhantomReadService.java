@@ -52,23 +52,23 @@ public class PhantomReadService extends BaseService {
     }
 
     public List<GameTask> auditGameTask(Integer auditScore) {
-        log.info("[auditGameTask] find All");
-        List<GameTask> gameTasks = gameTaskRepository.findAll();
-        String gameTasksString = getGameTaskString(gameTasks);
-        log.info("[auditGameTask] List {} ", gameTasksString);
+        log.info("[auditGameTask (T1)] find GameTasks by greater than auditScore");
+        List<GameTask> auditGameTasks = gameTaskRepository.findGameTasksByScoreGreaterThan(auditScore);
+
+        log.info("[auditGameTask (T1)] Ready Update Credit {} ", auditGameTasks);
         sleep(1.0);
 
+        // use jpql to update database
         gameTaskRepository.updateCreditGreaterThan(auditScore);
 
         // If you don't clear the hibernate cache,
         // you will load data from the cache not the db and entity is incorrect.
         entityManager.clear();
-        List<GameTask> newGameTask = gameTaskRepository.findAll();
+        List<GameTask> updatedGameTasks = gameTaskRepository.findGameTasksByScoreGreaterThan(auditScore);
 
-        gameTasksString = getGameTaskString(newGameTask);
-        log.info("[auditGameTask] New List {} ", gameTasksString);
+        log.info("[auditGameTask (T1)] Complete Update Credit {} ", getGameTaskString(updatedGameTasks));
 
-        return newGameTask;
+        return updatedGameTasks;
     }
 
     private String getGameTaskString(List<GameTask> gameTasks) {
@@ -105,7 +105,7 @@ public class PhantomReadService extends BaseService {
     public void createGameTask(String name, Integer score) {
         sleep(0.5);
         gameTaskRepository.save(GameTask.create(name, score));
-        log.info("[createGameTask] Commit");
+        log.info("[createGameTask (T2)] Commit");
     }
 
 

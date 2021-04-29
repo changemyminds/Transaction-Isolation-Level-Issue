@@ -5,6 +5,8 @@ import com.darren.transactionisolation.isolation.GameTask;
 import com.darren.transactionisolation.isolation.IsolationIssueTemplate;
 import com.darren.transactionisolation.model.PhantomReadExpectOccur;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -13,19 +15,20 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Description: {@link PhantomReadControllerTest}
  * Reference:
  */
-public abstract class BasePhantomRead extends IsolationIssueTemplate<GameTask, PhantomReadExpectOccur> {
-    protected final void assertOccur(GameTask actual, PhantomReadExpectOccur expectOccur) {
+public abstract class BasePhantomRead extends IsolationIssueTemplate<List<GameTask>, PhantomReadExpectOccur> {
+    protected final void assertOccur(List<GameTask> actual, PhantomReadExpectOccur expectOccur) {
         assertThat(actual).isNotNull();
+        assertThat(actual).isNotEmpty();
         assertThat(expectOccur).isNotNull();
 
-        assertThat(actual.getScore()).isGreaterThan(expectOccur.getAuditScore());
-        assertThat(actual.getName()).isEqualTo(expectOccur.getName());
-        assertThat(actual.getScore()).isEqualTo(expectOccur.getScore());
-        assertThat(actual.getCredit()).isEqualTo(expectOccur.getCredit());
+        assertThat(actual.size()).isEqualTo(expectOccur.getIncorrectCount());
     }
 
-    protected final void assertNotOccur(GameTask actual, PhantomReadExpectOccur expectOccur) {
-        assertThat(actual).isNull();
+    protected final void assertNotOccur(List<GameTask> actual, PhantomReadExpectOccur expectOccur) {
+        assertThat(actual).isNotNull();
+        assertThat(actual).isNotEmpty();
         assertThat(expectOccur).isNotNull();
+
+        assertThat(actual.size()).isEqualTo(expectOccur.getCorrectCount());
     }
 }

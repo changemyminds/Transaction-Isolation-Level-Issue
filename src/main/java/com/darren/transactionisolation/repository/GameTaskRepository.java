@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Author: changemyminds.
  * Date: 2021/4/26.
@@ -22,4 +24,6 @@ public interface GameTaskRepository extends JpaRepository<GameTask, Long> {
     @Query(value = "UPDATE game_task SET credit = credit + 1 WHERE score>=:score",
             nativeQuery = true)
     void updateCreditGreaterThan(@Param("score") Integer score);
+
+    List<GameTask> findGameTasksByScoreGreaterThan(Integer score);
 }

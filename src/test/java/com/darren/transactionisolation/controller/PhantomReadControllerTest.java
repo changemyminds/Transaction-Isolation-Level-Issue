@@ -29,7 +29,7 @@ public class PhantomReadControllerTest extends BaseIsolationControllerTest {
     private static final String CREATE_ENDPOINT = "/phantom-read/create";
 
     private final PhantomReadExpectOccur expectOccur
-            = new PhantomReadExpectOccur("changemyminds", 888, 1, 700);
+            = new PhantomReadExpectOccur("changemyminds", 888, 1, 650, 2, 3);
 
     @Autowired
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -45,19 +45,18 @@ public class PhantomReadControllerTest extends BaseIsolationControllerTest {
     @Override
     public void setupAll() {
         super.setupAll();
-//        System.out.println("==========================================");
-//        System.out.println("|  Deposit(T1)      | Withdraw(T2)       |");
-//        System.out.println("------------------------------------------");
-//        System.out.println("|  Read(0)          |                    |");
-//        System.out.println("|  deposit(0 + 500) |                    |");
-//        System.out.println("|                   |  Read 0            |");
-//        System.out.println("|  Rollback         |                    |");
-//        System.out.println("|                   |  Withdraw(0 - 300) |");
-//        System.out.println("|                   |  Commit            |");
-//        System.out.println("------------------------------------------");
-//        System.out.println("[Not Occur Dirty Read] Amount is " + expectOccur.getCorrectTotalAmount());
-//        System.out.println("[Occur Dirty Read]     Amount is " + expectOccur.getIncorrectTotalAmount());
-//        System.out.println("==========================================");
+        System.out.println("=========================================================");
+        System.out.println("|  audit(T1)                     | create(T2)           |");
+        System.out.println("---------------------------------------------------------");
+        System.out.println("|  List(score > 650, count = 2)  |                      |");
+        System.out.println("|                                |  create(score: 888)  |");
+        System.out.println("|                                |  Commit              |");
+        System.out.println("|  Update(score > 650)           |                      |");
+        System.out.println("|  List(score > 650, count = 3)  |                      |");
+        System.out.println("---------------------------------------------------------");
+        System.out.println("[Not Occur Dirty Read] Count is " + expectOccur.getCorrectCount());
+        System.out.println("[Occur Dirty Read]     Count is " + expectOccur.getIncorrectCount());
+        System.out.println("=========================================================");
     }
 
     @Test
@@ -98,12 +97,7 @@ public class PhantomReadControllerTest extends BaseIsolationControllerTest {
     private void testPhantomRead(Isolation isolation, PhantomReadDelegate readDelegate) throws Exception {
         List<GameTask> gameTasks = phantomRead(isolation);
 
-        executeTemplate(isolation, gameTasks, (games) -> {
-            GameTask gameTask = games.stream().filter(game -> expectOccur.getName().equals(game.getName()))
-                    .findFirst()
-                    .orElse(null);
-            return readDelegate.assertResult(gameTask, expectOccur);
-        });
+        executeTemplate(isolation, gameTasks, (games) -> readDelegate.assertResult(games, expectOccur));
     }
 
     private List<GameTask> phantomRead(Isolation isolation) throws Exception {
@@ -135,6 +129,6 @@ public class PhantomReadControllerTest extends BaseIsolationControllerTest {
         return "Phantom Read";
     }
 
-    private interface PhantomReadDelegate extends IsolationIssueDelegate<GameTask, PhantomReadExpectOccur> {
+    private interface PhantomReadDelegate extends IsolationIssueDelegate<List<GameTask>, PhantomReadExpectOccur> {
     }
 }
