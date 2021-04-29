@@ -10,7 +10,7 @@ import com.darren.transactionisolation.model.LostUpdateExpectOccur;
  * Description:
  * Reference:
  */
-public class LostUpdateMsSql extends BaseLostUpdate {
+public class LostUpdateSqlServer extends BaseLostUpdate {
     @Override
     public IsolationResult assertREPEATABLE_READ(Inventory actual, LostUpdateExpectOccur expectOccur) {
         return notOccur(actual, expectOccur);

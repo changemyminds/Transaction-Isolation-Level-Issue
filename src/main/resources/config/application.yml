@@ -1,6 +1,6 @@
 spring:
   profiles:
-    # h2 mssql mysql postgresql
+    # h2 mysql postgresql sqlserver
     active: h2
 
   jpa:

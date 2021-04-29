@@ -37,7 +37,7 @@ Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
 | REPEATABLE_READ | not occur  | not occur         | not occur    | may occur   |
 | SERIALIZABLE    | not occur  | not occur         | not occur    | may occur   |
 
-### MS SQL
+### SQL Server
 
 Version: Microsoft SQL Server 2019 (RTM-CU10) (KB5001090) - 15.0.4123.1 (X64)
 

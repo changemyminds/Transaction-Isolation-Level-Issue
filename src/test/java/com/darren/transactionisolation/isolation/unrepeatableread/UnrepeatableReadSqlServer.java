@@ -10,7 +10,7 @@ import com.darren.transactionisolation.model.UnrepeatableReadExpectOccur;
  * Description:
  * Reference:
  */
-public class UnrepeatableReadMsSql extends BaseUnrepeatableRead {
+public class UnrepeatableReadSqlServer extends BaseUnrepeatableRead {
     @Override
     public IsolationResult assertREPEATABLE_READ(Inventory actual, UnrepeatableReadExpectOccur expectOccur) {
         return notOccur(actual, expectOccur);

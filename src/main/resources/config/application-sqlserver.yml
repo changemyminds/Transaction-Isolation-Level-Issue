@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost:1433;database=test_isolation
+    url: jdbc:sqlserver://${sqlserver-ip:localhost}:${sqlserver-port:1433};database=test_isolation
     username: sa
     password: 1234Hellowrold
 

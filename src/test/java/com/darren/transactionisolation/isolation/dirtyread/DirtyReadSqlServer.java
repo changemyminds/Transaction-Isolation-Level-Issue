@@ -10,7 +10,7 @@ import com.darren.transactionisolation.model.IsolationResult;
  * Description:
  * Reference:
  */
-public class DirtyReadMsSql extends BaseDirtyRead {
+public class DirtyReadSqlServer extends BaseDirtyRead {
     @Override
     public IsolationResult assertDEFAULT(Account actual, DirtyReadExpectOccur expectOccur) {
         return notOccur(actual, expectOccur);

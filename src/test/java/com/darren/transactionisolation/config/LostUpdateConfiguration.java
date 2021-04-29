@@ -22,12 +22,6 @@ public class LostUpdateConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.MS_SQL)
-    public BaseLostUpdate lostUpdateMsSql() {
-        return new LostUpdateMsSql();
-    }
-
-    @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.MY_SQL)
     public BaseLostUpdate lostUpdateMySql() {
         return new LostUpdateMySql();
@@ -37,5 +31,11 @@ public class LostUpdateConfiguration {
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.POSTGRE_SQL)
     public BaseLostUpdate lostUpdatePostgreSql() {
         return new LostUpdatePostgreSql();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQL_SERVER)
+    public BaseLostUpdate lostUpdateSqlServer() {
+        return new LostUpdateSqlServer();
     }
 }

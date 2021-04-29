@@ -6,5 +6,5 @@ package com.darren.transactionisolation.isolation.phantomread;
  * Description:
  * Reference:
  */
-public class PhantomReadMsSql extends BasePhantomRead {
+public class PhantomReadSqlServer extends BasePhantomRead {
 }

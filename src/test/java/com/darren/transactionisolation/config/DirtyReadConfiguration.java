@@ -22,12 +22,6 @@ public class DirtyReadConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.MS_SQL)
-    public BaseDirtyRead dirtyReadMsSql() {
-        return new DirtyReadMsSql();
-    }
-
-    @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.MY_SQL)
     public BaseDirtyRead dirtyReadMySql() {
         return new DirtyReadMySql();
@@ -37,5 +31,11 @@ public class DirtyReadConfiguration {
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.POSTGRE_SQL)
     public BaseDirtyRead dirtyReadPostgreSql() {
         return new DirtyReadPostgreSql();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQL_SERVER)
+    public BaseDirtyRead dirtyReadSqlServer() {
+        return new DirtyReadSqlServer();
     }
 }

@@ -22,12 +22,6 @@ public class PhantomReadConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.MS_SQL)
-    public BasePhantomRead phantomReadMsSql() {
-        return new PhantomReadMsSql();
-    }
-
-    @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.MY_SQL)
     public BasePhantomRead phantomReadMySql() {
         return new PhantomReadMySql();
@@ -37,5 +31,11 @@ public class PhantomReadConfiguration {
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.POSTGRE_SQL)
     public BasePhantomRead phantomReadPostgreSql() {
         return new PhantomReadPostgreSql();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQL_SERVER)
+    public BasePhantomRead phantomReadSqlServer() {
+        return new PhantomReadSqlServer();
     }
 }

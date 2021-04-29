@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/test_isolation
+    url: jdbc:postgresql://${postgresql-ip:localhost}:${postgresql-port:5432}/test_isolation
     username: postgres
     password: 1234
 

@@ -17,25 +17,25 @@ import org.springframework.context.annotation.Configuration;
 public class UnrepeatableReadConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.H2)
-    public BaseUnrepeatableRead UnrepeatableReadH2() {
+    public BaseUnrepeatableRead unrepeatableReadH2() {
         return new UnrepeatableReadH2();
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.MS_SQL)
-    public BaseUnrepeatableRead UnrepeatableReadMsSql() {
-        return new UnrepeatableReadMsSql();
-    }
-
-    @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.MY_SQL)
-    public BaseUnrepeatableRead UnrepeatableReadMySql() {
+    public BaseUnrepeatableRead unrepeatableReadMySql() {
         return new UnrepeatableReadMySql();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.POSTGRE_SQL)
-    public BaseUnrepeatableRead UnrepeatableReadPostgreSql() {
+    public BaseUnrepeatableRead unrepeatableReadPostgreSql() {
         return new UnrepeatableReadPostgreSql();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQL_SERVER)
+    public BaseUnrepeatableRead unrepeatableReadSqlServer() {
+        return new UnrepeatableReadSqlServer();
     }
 }

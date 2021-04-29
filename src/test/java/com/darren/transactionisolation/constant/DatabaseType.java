@@ -8,7 +8,7 @@ package com.darren.transactionisolation.constant;
  */
 public class DatabaseType {
     public static final String H2 = "h2";
-    public static final String MS_SQL = "mssql";
     public static final String MY_SQL = "mysql";
     public static final String POSTGRE_SQL = "postgresql";
+    public static final String SQL_SERVER = "sqlserver";
 }
