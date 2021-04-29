@@ -43,8 +43,6 @@ sqlserver-port=4033
 
 ### H2
 
-Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
-
 | Isolation Level | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
 | --------------- | ---------- | ----------------- | ------------ | ----------- |
 | DEFAULT         | not occur  | may occur         | may occur    | may occur   |
@@ -53,13 +51,13 @@ Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
 | REPEATABLE_READ | not occur  | not occur         | not occur    | may occur   |
 | SERIALIZABLE    | not occur  | not occur         | not occur    | may occur   |
 
+> - Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
+
+---
+
 ### MySQL
 
 Version: **MySQL 5.7 InnoDB**
-
-Isolation Level `DEFAULT` seems to be equal to `REPEATABLE_READ`.
-
-In the `Lost Update` problem, the `SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
 
 | Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
 | ---------------- | ---------- | ----------------- | ------------ | ----------- |
@@ -69,13 +67,14 @@ In the `Lost Update` problem, the `SERIALIZABLE` in Isolation Level must be retr
 | REPEATABLE_READ  | not occur  | not occur         | may occur    | may occur   |
 | SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
+> - Isolation Level `DEFAULT` seems to be equal to `REPEATABLE_READ`.
+> - In the `Lost Update` problem, the `SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
+
+---
+
 ### PostgreSQL 
 
 Version: **PostgreSQL 13.2**
-
-Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
-
-In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
 
 | Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
 | ---------------- | ---------- | ----------------- | ------------ | ----------- |
@@ -85,13 +84,14 @@ In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolatio
 | REPEATABLE_READ  | not occur  | not occur         | not occur    | not occur   |
 | SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
+> - Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
+> - In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`
+
+---
+
 ### SQL Server
 
 Version: **Microsoft SQL Server 2019 (RTM-CU10) (KB5001090) - 15.0.4123.1 (X64)**
-
-Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
-
-In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
 
 | Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
 | ---------------- | ---------- | ----------------- | ------------ | ----------- |
@@ -101,6 +101,10 @@ In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolatio
 | REPEATABLE_READ  | not occur  | not occur         | may occur    | not occur   |
 | SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
+> - Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
+> -  In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
+
+---
 
 ## Reference
 - https://medium.com/@chester.yw.chu/%E5%B0%8D%E6%96%BC-mysql-repeatable-read-isolation-%E5%B8%B8%E8%A6%8B%E7%9A%84%E4%B8%89%E5%80%8B%E8%AA%A4%E8%A7%A3-7a9afbac65af
