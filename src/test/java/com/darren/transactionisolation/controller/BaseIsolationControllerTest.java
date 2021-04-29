@@ -4,9 +4,11 @@ import com.darren.transactionisolation.model.IsolationResult;
 import com.darren.transactionisolation.isolation.IsolationOperate;
 import com.darren.transactionisolation.service.SeedService;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Isolation;
 
 import java.util.LinkedHashMap;
@@ -19,9 +21,9 @@ import java.util.function.Function;
  * Description:
  * Reference:
  */
+@TestPropertySource(locations = {"classpath:/config/database-setting.properties"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public abstract class BaseIsolationControllerTest extends BaseControllerTest implements IsolationOperate {
-
     private final Map<Isolation, String> resultMap = new LinkedHashMap<>();
 
     @Autowired

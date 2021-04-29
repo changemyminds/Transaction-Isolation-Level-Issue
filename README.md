@@ -9,13 +9,29 @@
 
 ## Simulate Concurrent Transaction
 
-### Switch Database Testing
-Go to [here](src/main/resources/config/application.yml) to change your testing database.
+###  Database Setting
+
+Go to [here](src/main/resources/config/application.yml) to change your testing database type.
 ```yaml
 spring:
   profiles:
     # dev h2 mssql mysql postgresql
     active: h2
+```
+
+Go to [here](src/main/resources/config/database-setting.properties) to change your database setting if you custom your database ip or port.
+```properties
+# Change to your custom mysql ip or port
+mysql-ip=localhost
+mysql-port=3306
+
+# Change to your custom postgresql ip or port
+postgresql-ip=localhost
+postgresql-port=5432
+
+# Change to your custom sqlserver ip or port
+sqlserver-ip=localhost
+sqlserver-port=4033
 ```
 
 ### Use the JUnit 5 to test
@@ -27,7 +43,7 @@ spring:
 
 ### H2
 
-Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
+Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
 
 | Isolation Level | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
 | --------------- | ---------- | ----------------- | ------------ | ----------- |
@@ -37,30 +53,13 @@ Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
 | REPEATABLE_READ | not occur  | not occur         | not occur    | may occur   |
 | SERIALIZABLE    | not occur  | not occur         | not occur    | may occur   |
 
-### SQL Server
-
-Version: Microsoft SQL Server 2019 (RTM-CU10) (KB5001090) - 15.0.4123.1 (X64)
-
-Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
-
-`REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level `Lost Update` need `@Retryable` to retry otherwise will throw `CannotAcquireLockException`.
-
-
-| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
-| ---------------- | ---------- | ----------------- | ------------ | ----------- |
-| DEFAULT          | not occur  | may occur         | may occur    | may occur   |
-| READ_UNCOMMITTED | may occur  | may occur         | may occur    | may occur   |
-| READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   |
-| REPEATABLE_READ  | not occur  | not occur         | may occur    | not occur   |
-| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
-
 ### MySQL
 
-Version: MySQL 5.7 InnoDB
+Version: **MySQL 5.7 InnoDB**
 
-Isolation Level `DEFAULT` seems is equal `REPEATABLE_READ`.
+Isolation Level `DEFAULT` seems to be equal to `REPEATABLE_READ`.
 
-`SERIALIZABLE` in Isolation Level `Lost Update` need `@Retryable` to retry otherwise will throw `CannotAcquireLockException`.
+In the `Lost Update` problem, the `SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
 
 | Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
 | ---------------- | ---------- | ----------------- | ------------ | ----------- |
@@ -72,11 +71,11 @@ Isolation Level `DEFAULT` seems is equal `REPEATABLE_READ`.
 
 ### PostgreSQL 
 
-Version: PostgreSQL 13.2
+Version: **PostgreSQL 13.2**
 
-Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
+Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
 
-`REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level `Lost Update` need `@Retryable` to retry otherwise will throw `CannotAcquireLockException`.
+In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
 
 | Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
 | ---------------- | ---------- | ----------------- | ------------ | ----------- |
@@ -84,6 +83,22 @@ Isolation Level `DEFAULT` seems is equal `READ_COMMITTED`.
 | READ_UNCOMMITTED | not occur  | may occur         | may occur    | may occur   |
 | READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   |
 | REPEATABLE_READ  | not occur  | not occur         | not occur    | not occur   |
+| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
+
+### SQL Server
+
+Version: **Microsoft SQL Server 2019 (RTM-CU10) (KB5001090) - 15.0.4123.1 (X64)**
+
+Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
+
+In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
+
+| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
+| ---------------- | ---------- | ----------------- | ------------ | ----------- |
+| DEFAULT          | not occur  | may occur         | may occur    | may occur   |
+| READ_UNCOMMITTED | may occur  | may occur         | may occur    | may occur   |
+| READ_COMMITTED   | not occur  | may occur         | may occur    | may occur   |
+| REPEATABLE_READ  | not occur  | not occur         | may occur    | not occur   |
 | SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
 
