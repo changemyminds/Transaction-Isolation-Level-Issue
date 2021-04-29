@@ -1,7 +1,7 @@
 spring:
   profiles:
     # h2 mssql mysql postgresql
-    active: mssql
+    active: h2
 
   jpa:
     open-in-view: false

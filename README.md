@@ -10,6 +10,7 @@
 ## Simulate Concurrent Transaction
 
 ### Switch Database Testing
+Go to [here](src/main/resources/config/application.yml) to change your testing database.
 ```yaml
 spring:
   profiles:

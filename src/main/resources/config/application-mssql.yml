@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://172.27.192.163:1400;database=test_isolation
+    url: jdbc:sqlserver://localhost:1433;database=test_isolation
     username: sa
     password: 1234Hellowrold
 
