@@ -114,7 +114,6 @@ public class PhantomReadControllerTest extends BaseIsolationControllerTest {
         Future<ResultActions> t2 = executorService.submit(() -> performPost(CREATE_ENDPOINT, (builder) -> {
             builder.param("name", expectOccur.getName());
             builder.param("score", String.valueOf(expectOccur.getScore()));
-            builder.param("isolation", isolation.name());
         }));
 
         t2.get().andExpect(STATUS_OK);

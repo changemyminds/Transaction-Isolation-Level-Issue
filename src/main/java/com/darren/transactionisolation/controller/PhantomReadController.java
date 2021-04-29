@@ -43,26 +43,7 @@ public class PhantomReadController {
 
     @PostMapping("/create")
     public void create(@RequestParam String name,
-                       @RequestParam Integer score,
-                       @RequestParam String isolation) {
-
-        switch (Isolation.valueOf(isolation)) {
-            case READ_UNCOMMITTED:
-                 phantomReadService.createGameTaskREAD_UNCOMMITTED(name, score);
-                 return;
-            case READ_COMMITTED:
-                phantomReadService.createGameTaskREAD_COMMITTED(name, score);
-                return;
-            case REPEATABLE_READ:
-                phantomReadService.createGameTaskREPEATABLE_READ(name, score);
-                return;
-            case SERIALIZABLE:
-                phantomReadService.createGameTaskSERIALIZABLE(name, score);
-                return;
-            case DEFAULT:
-            default:
-                phantomReadService.createGameTaskDEFAULT(name, score);
-                return;
-        }
+                       @RequestParam Integer score) {
+        phantomReadService.createGameTask(name, score);
     }
 }

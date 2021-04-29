@@ -76,31 +76,6 @@ public class PhantomReadService extends BaseService {
                 .collect(Collectors.joining(", "));
     }
 
-    @Transactional(isolation = Isolation.DEFAULT)
-    public void createGameTaskDEFAULT(String name, Integer score) {
-        createGameTask(name, score);
-    }
-
-    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
-    public void createGameTaskREAD_UNCOMMITTED(String name, Integer score) {
-        createGameTask(name, score);
-    }
-
-    @Transactional(isolation = Isolation.READ_COMMITTED)
-    public void createGameTaskREAD_COMMITTED(String name, Integer score) {
-        createGameTask(name, score);
-    }
-
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void createGameTaskREPEATABLE_READ(String name, Integer score) {
-        createGameTask(name, score);
-    }
-
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void createGameTaskSERIALIZABLE(String name, Integer score) {
-        createGameTask(name, score);
-    }
-
     @Transactional
     public void createGameTask(String name, Integer score) {
         sleep(0.5);
