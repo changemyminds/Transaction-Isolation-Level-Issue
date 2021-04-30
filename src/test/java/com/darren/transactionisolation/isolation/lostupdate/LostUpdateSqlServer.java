@@ -1,6 +1,6 @@
 package com.darren.transactionisolation.isolation.lostupdate;
 
-import com.darren.transactionisolation.isolation.Inventory;
+import com.darren.transactionisolation.isolation.Ticket;
 import com.darren.transactionisolation.model.IsolationResult;
 import com.darren.transactionisolation.model.LostUpdateExpectOccur;
 
@@ -12,7 +12,7 @@ import com.darren.transactionisolation.model.LostUpdateExpectOccur;
  */
 public class LostUpdateSqlServer extends BaseLostUpdate {
     @Override
-    public IsolationResult assertREPEATABLE_READ(Inventory actual, LostUpdateExpectOccur expectOccur) {
+    public IsolationResult assertREPEATABLE_READ(Ticket actual, LostUpdateExpectOccur expectOccur) {
         return notOccur(actual, expectOccur);
     }
 }

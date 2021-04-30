@@ -1,6 +1,6 @@
 package com.darren.transactionisolation.controller;
 
-import com.darren.transactionisolation.isolation.Inventory;
+import com.darren.transactionisolation.isolation.Ticket;
 import com.darren.transactionisolation.log.LogTopic;
 import com.darren.transactionisolation.service.LostUpdateService;
 import lombok.RequiredArgsConstructor;
@@ -21,33 +21,33 @@ import org.springframework.web.bind.annotation.*;
 public class LostUpdateController {
     private final LostUpdateService lostUpdateService;
 
-    @PostMapping("/sell-item/{id}")
-    public void sellItem(@PathVariable Long id,
+    @PostMapping("/sell-ticket/{id}")
+    public void SellTicket(@PathVariable Long id,
                          @RequestParam Integer sellCount,
                          @RequestParam String isolation,
                          @RequestParam Boolean isT1) {
         log.info("Isolation {}, ", Isolation.valueOf(isolation));
         switch (Isolation.valueOf(isolation)) {
             case READ_UNCOMMITTED:
-                lostUpdateService.sellItemREAD_UNCOMMITTED(id, sellCount, isT1);
+                lostUpdateService.sellTicketREAD_UNCOMMITTED(id, sellCount, isT1);
                 return;
             case READ_COMMITTED:
-                lostUpdateService.sellItemREAD_COMMITTED(id, sellCount, isT1);
+                lostUpdateService.sellTicketREAD_COMMITTED(id, sellCount, isT1);
                 return;
             case REPEATABLE_READ:
-                lostUpdateService.sellItemREPEATABLE_READ(id, sellCount, isT1);
+                lostUpdateService.sellTicketREPEATABLE_READ(id, sellCount, isT1);
                 return;
             case SERIALIZABLE:
-                lostUpdateService.sellItemSERIALIZABLE(id, sellCount, isT1);
+                lostUpdateService.sellTicketSERIALIZABLE(id, sellCount, isT1);
                 return;
             case DEFAULT:
             default:
-                lostUpdateService.sellItemDEFAULT(id, sellCount, isT1);
+                lostUpdateService.sellTicketDEFAULT(id, sellCount, isT1);
         }
     }
 
-    @GetMapping("/inventory/{id}")
-    public Inventory readResult(@PathVariable Long id) {
-        return lostUpdateService.getInventory(id);
+    @GetMapping("/ticket/{id}")
+    public Ticket getRemainingTicket(@PathVariable Long id) {
+        return lostUpdateService.getRemainingTicket(id);
     }
 }

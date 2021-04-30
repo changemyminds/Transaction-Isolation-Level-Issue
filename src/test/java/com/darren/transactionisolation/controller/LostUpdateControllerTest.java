@@ -1,9 +1,9 @@
 package com.darren.transactionisolation.controller;
 
-import com.darren.transactionisolation.model.LostUpdateExpectOccur;
-import com.darren.transactionisolation.isolation.Inventory;
 import com.darren.transactionisolation.isolation.IsolationIssueDelegate;
+import com.darren.transactionisolation.isolation.Ticket;
 import com.darren.transactionisolation.isolation.lostupdate.BaseLostUpdate;
+import com.darren.transactionisolation.model.LostUpdateExpectOccur;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -26,8 +26,8 @@ import java.util.concurrent.Future;
  * Reference:
  */
 public class LostUpdateControllerTest extends BaseIsolationControllerTest {
-    private static final String LOST_UPDATE_SELL_ITEM_ENDPOINT = "/lost-update/sell-item";
-    private static final String LOST_UPDATE_GET_ITEM_ENDPOINT = "/lost-update/inventory";
+    private static final String LOST_UPDATE_SELL_ITEM_ENDPOINT = "/lost-update/sell-ticket";
+    private static final String LOST_UPDATE_GET_ITEM_ENDPOINT = "/lost-update/ticket";
 
     private final LostUpdateExpectOccur expectOccur
             = new LostUpdateExpectOccur(10, 4, 1, 5, 9);
@@ -40,22 +40,22 @@ public class LostUpdateControllerTest extends BaseIsolationControllerTest {
     @Override
     public void setupAll() {
         super.setupAll();
-        System.out.println("[Reset Inventory]");
-        seedService.resetInventory(expectOccur.getDefaultQuantity(), 5);
+        System.out.println("[Reset Ticket]");
+        seedService.resetTicket(expectOccur.getDefaultQuantity(), 5);
 
-        System.out.println("===================================");
-        System.out.println("|  SellItem(T1)  | SellItem(T2)   |");
-        System.out.println("-----------------------------------");
-        System.out.println("|  Read(10)       |               |");
-        System.out.println("|                 | Read(10)      |");
-        System.out.println("|  Sell(10 - 4)   |               |");
-        System.out.println("|  Commit         |               |");
-        System.out.println("|                 | Sell(10 - 1)  |");
-        System.out.println("|                 | Commit        |");
-        System.out.println("-----------------------------------");
+        System.out.println("======================================");
+        System.out.println("|  SellTicket(T1)  | SellTicket(T2)  |");
+        System.out.println("--------------------------------------");
+        System.out.println("|  Read(10)       |                  |");
+        System.out.println("|                 | Read(10)         |");
+        System.out.println("|  Sell(10 - 4)   |                  |");
+        System.out.println("|  Commit         |                  |");
+        System.out.println("|                 | Sell(10 - 1)     |");
+        System.out.println("|                 | Commit           |");
+        System.out.println("--------------------------------------");
         System.out.println("[Not Occur Lost Update] Amount is " + expectOccur.getCorrectQuantity());
         System.out.println("[Occur Lost Update]     Amount is " + expectOccur.getIncorrectQuantity());
-        System.out.println("===================================");
+        System.out.println("======================================");
     }
 
     @Test
@@ -95,18 +95,18 @@ public class LostUpdateControllerTest extends BaseIsolationControllerTest {
         testLostUpdate(5, Isolation.SERIALIZABLE, lostUpdate::assertSERIALIZABLE);
     }
 
-    private void testLostUpdate(long inventoryId, Isolation isolation, LostUpdateDelegate readDelegate) throws Exception {
-        Inventory inventory = lostUpdate(inventoryId, isolation);
+    private void testLostUpdate(long ticketId, Isolation isolation, LostUpdateDelegate readDelegate) throws Exception {
+        Ticket inventory = lostUpdate(ticketId, isolation);
         executeTemplate(isolation, inventory, (data) -> readDelegate.assertResult(data, expectOccur));
     }
 
-    private Inventory lostUpdate(long inventoryId, Isolation isolation) throws Exception {
+    private Ticket lostUpdate(long ticketId, Isolation isolation) throws Exception {
         // Create multiple threads to simulate concurrency
         final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
         // Sell g
         Future<ResultActions> t1 = executorService.submit(() -> {
-            String url = String.format("%s/%s", LOST_UPDATE_SELL_ITEM_ENDPOINT, inventoryId);
+            String url = String.format("%s/%s", LOST_UPDATE_SELL_ITEM_ENDPOINT, ticketId);
             return performPost(url, (builder) -> {
                 builder.param("sellCount", String.valueOf(expectOccur.getSellQuantityT1()));
                 builder.param("isolation", isolation.name());
@@ -116,7 +116,7 @@ public class LostUpdateControllerTest extends BaseIsolationControllerTest {
 
         // Withdraw Amount
         Future<ResultActions> t2 = executorService.submit(() -> {
-            String url = String.format("%s/%s", LOST_UPDATE_SELL_ITEM_ENDPOINT, inventoryId);
+            String url = String.format("%s/%s", LOST_UPDATE_SELL_ITEM_ENDPOINT, ticketId);
             return performPost(url, (builder) -> {
                 builder.param("sellCount", String.valueOf(expectOccur.getSellQuantityT2()));
                 builder.param("isolation", isolation.name());
@@ -132,11 +132,11 @@ public class LostUpdateControllerTest extends BaseIsolationControllerTest {
         }
 
         // Check Result
-        ResultActions resultActions = performGet(String.format("%s/%s", LOST_UPDATE_GET_ITEM_ENDPOINT, inventoryId))
+        ResultActions resultActions = performGet(String.format("%s/%s", LOST_UPDATE_GET_ITEM_ENDPOINT, ticketId))
                 .andExpect(STATUS_OK);
 
         // Get the Account
-        return fromResult(resultActions, Inventory.class);
+        return fromResult(resultActions, Ticket.class);
     }
 
     @Override
@@ -144,6 +144,6 @@ public class LostUpdateControllerTest extends BaseIsolationControllerTest {
         return "Lost Update";
     }
 
-    private interface LostUpdateDelegate extends IsolationIssueDelegate<Inventory, LostUpdateExpectOccur> {
+    private interface LostUpdateDelegate extends IsolationIssueDelegate<Ticket, LostUpdateExpectOccur> {
     }
 }

@@ -3,9 +3,11 @@ package com.darren.transactionisolation.service;
 import com.darren.transactionisolation.isolation.Account;
 import com.darren.transactionisolation.isolation.GameTask;
 import com.darren.transactionisolation.isolation.Inventory;
+import com.darren.transactionisolation.isolation.Ticket;
 import com.darren.transactionisolation.repository.AccountRepository;
 import com.darren.transactionisolation.repository.GameTaskRepository;
 import com.darren.transactionisolation.repository.InventoryRepository;
+import com.darren.transactionisolation.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ public class SeedService {
     private final AccountRepository accountRepository;
     private final InventoryRepository inventoryRepository;
     private final GameTaskRepository gameTaskRepository;
+    private final TicketRepository ticketRepository;
 
     public void resetGameTasks() {
         initGameTasks(true);
@@ -66,6 +69,18 @@ public class SeedService {
         createSeedCount(count, () -> inventoryRepository.save(createInventory(quantity)));
     }
 
+    public void resetTicket(int quantity, int count) {
+        initTicket(quantity, count, true);
+    }
+
+    public void initTicket(int quantity, int count, boolean clear) {
+        if (clear && ticketRepository.count() > 0) {
+            ticketRepository.deleteAll();
+        }
+
+        createSeedCount(count, () -> ticketRepository.save(createTicket(quantity)));
+    }
+
     private void createSeedCount(int count, Runnable runnable) {
         Stream.iterate(1, n -> n + 1)
                 .limit(count)
@@ -80,6 +95,12 @@ public class SeedService {
 
     private Inventory createInventory(int quantity) {
         Inventory inventory = new Inventory();
+        inventory.setQuantity(quantity);
+        return inventory;
+    }
+
+    private Ticket createTicket(int quantity) {
+        Ticket inventory = new Ticket();
         inventory.setQuantity(quantity);
         return inventory;
     }

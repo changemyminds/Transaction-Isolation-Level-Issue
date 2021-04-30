@@ -1,8 +1,8 @@
 package com.darren.transactionisolation.isolation.lostupdate;
 
 import com.darren.transactionisolation.controller.LostUpdateControllerTest;
-import com.darren.transactionisolation.isolation.Inventory;
 import com.darren.transactionisolation.isolation.IsolationIssueTemplate;
+import com.darren.transactionisolation.isolation.Ticket;
 import com.darren.transactionisolation.model.LostUpdateExpectOccur;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,10 +13,10 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Description: {@link LostUpdateControllerTest}
  * Reference:
  */
-public abstract class BaseLostUpdate extends IsolationIssueTemplate<Inventory, LostUpdateExpectOccur> {
+public abstract class BaseLostUpdate extends IsolationIssueTemplate<Ticket, LostUpdateExpectOccur> {
 
     @Override
-    protected final void assertOccur(Inventory actual, LostUpdateExpectOccur expectOccur) {
+    protected final void assertOccur(Ticket actual, LostUpdateExpectOccur expectOccur) {
         assertThat(actual).isNotNull();
         assertThat(expectOccur).isNotNull();
 
@@ -25,7 +25,7 @@ public abstract class BaseLostUpdate extends IsolationIssueTemplate<Inventory, L
     }
 
     @Override
-    protected final void assertNotOccur(Inventory actual, LostUpdateExpectOccur expectOccur) {
+    protected final void assertNotOccur(Ticket actual, LostUpdateExpectOccur expectOccur) {
         assertThat(actual).isNotNull();
         assertThat(expectOccur).isNotNull();
 

@@ -19,4 +19,17 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Modifying
     @Query(value = "VACUUM", nativeQuery = true)
     void vacuum();
+
+    @Modifying
+    @Query(value = "ALTER TABLE inventory AUTO_INCREMENT = 1", nativeQuery = true)
+    void resetId();
+
+    @Modifying
+    @Query(value = "ALTER SEQUENCE seq RESTART;", nativeQuery = true)
+    void resetSeq();
+
+    @Modifying
+    @Query(value = "UPDATE inventory SET id = DEFAULT;", nativeQuery = true)
+    void updateIdColumn();
+
 }

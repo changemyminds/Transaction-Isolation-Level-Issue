@@ -1,8 +1,8 @@
 package com.darren.transactionisolation.service;
 
-import com.darren.transactionisolation.isolation.Inventory;
+import com.darren.transactionisolation.isolation.Ticket;
 import com.darren.transactionisolation.log.LogTopic;
-import com.darren.transactionisolation.repository.InventoryRepository;
+import com.darren.transactionisolation.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.TransactionException;
@@ -12,6 +12,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityNotFoundException;
 
 /**
@@ -24,70 +25,69 @@ import javax.persistence.EntityNotFoundException;
 @Service
 @RequiredArgsConstructor
 public class LostUpdateService extends BaseService {
-    private final InventoryRepository inventoryRepository;
+    private final TicketRepository ticketRepository;
 
     // [SQLITE_BUSY]  The database file is locked (database is locked). So SQLite need retried it.
     @Retryable(value = {TransactionException.class}, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional(isolation = Isolation.DEFAULT)
-    public void sellItemDEFAULT(Long id, Integer itemCount, boolean isT1) {
-        sellItem(id, itemCount, isT1);
+    public void sellTicketDEFAULT(Long id, Integer quantity, boolean isT1) {
+        sellTicket(id, quantity, isT1);
     }
 
     // [SQLITE_BUSY]  The database file is locked (database is locked). So SQLite need retried it.
     @Retryable(value = {TransactionException.class}, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional(isolation = Isolation.READ_UNCOMMITTED)
-    public void sellItemREAD_UNCOMMITTED(Long id, Integer itemCount, boolean isT1) {
-        sellItem(id, itemCount, isT1);
+    public void sellTicketREAD_UNCOMMITTED(Long id, Integer quantity, boolean isT1) {
+        sellTicket(id, quantity, isT1);
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public void sellItemREAD_COMMITTED(Long id, Integer itemCount, boolean isT1) {
-        sellItem(id, itemCount, isT1);
+    public void sellTicketREAD_COMMITTED(Long id, Integer quantity, boolean isT1) {
+        sellTicket(id, quantity, isT1);
     }
 
     // (Postgresql) LockAcquisitionException: Deadlock found when trying to get lock; try restarting transaction
     @Retryable(value = LockAcquisitionException.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public void sellItemREPEATABLE_READ(Long id, Integer itemCount, boolean isT1) {
-        sellItem(id, itemCount, isT1);
+    public void sellTicketREPEATABLE_READ(Long id, Integer quantity, boolean isT1) {
+        sellTicket(id, quantity, isT1);
     }
 
     // (MySQL、Postgresql) LockAcquisitionException: Deadlock found when trying to get lock; try restarting transaction
     // [SQLITE_BUSY]  The database file is locked (database is locked). So SQLite need retried it.
     @Retryable(value = {LockAcquisitionException.class, TransactionException.class}, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public void sellItemSERIALIZABLE(Long id, Integer itemCount, boolean isT1) {
-        sellItem(id, itemCount, isT1);
+    public void sellTicketSERIALIZABLE(Long id, Integer quantity, boolean isT1) {
+        sellTicket(id, quantity, isT1);
     }
 
-    public void sellItem(Long id, Integer itemCount, boolean isT1) {
+    public void sellTicket(Long id, Integer quantity, boolean isT1) {
         if (!isT1) sleep(0.5);
 
-        Inventory inventory = getInventory(id);
+        Ticket ticket = getRemainingTicket(id);
         if (isT1) {
-            log.info("[SellItem (T1)] Read {}", inventory);
+            log.info("[SellTicket (T1)] Read {}", ticket);
             sleep(1.0);
         } else {
-            log.info("[SellItem (T2)] Read {}", inventory);
+            log.info("[SellTicket (T2)] Read {}", ticket);
             sleep(1.5);
         }
 
-        Integer quantity = inventory.getQuantity();
-        inventory.setQuantity(quantity - itemCount);
-        inventoryRepository.saveAndFlush(inventory);
+        Integer nowQuantity = ticket.getQuantity();
+        ticket.setQuantity(nowQuantity - quantity);
+        ticketRepository.saveAndFlush(ticket);
 
         if (isT1) {
-            log.info("[SellItem (T1)] Update Quantity {}", inventory);
-            log.info("[SellItem (T1)] Commit");
+            log.info("[SellTicket (T1)] Update selling quantity {}", ticket);
+            log.info("[SellTicket (T1)] Commit");
         } else {
-            log.info("[SellItem (T2)] Update Quantity {}", inventory);
-            log.info("[SellItem (T2)] Commit");
+            log.info("[SellTicket (T2)] Update selling quantity {}", ticket);
+            log.info("[SellTicket (T2)] Commit");
         }
     }
 
-    public Inventory getInventory(Long id) {
-        Inventory inventory = inventoryRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        log.info("{}", inventory);
-        return inventory;
+    public Ticket getRemainingTicket(Long id) {
+        return ticketRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Can't find the id " + id));
     }
 }

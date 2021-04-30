@@ -1,6 +1,6 @@
 package com.darren.transactionisolation.isolation.lostupdate;
 
-import com.darren.transactionisolation.isolation.Inventory;
+import com.darren.transactionisolation.isolation.Ticket;
 import com.darren.transactionisolation.model.IsolationResult;
 import com.darren.transactionisolation.model.LostUpdateExpectOccur;
 
@@ -12,22 +12,22 @@ import com.darren.transactionisolation.model.LostUpdateExpectOccur;
  */
 public class LostUpdateSqlite extends BaseLostUpdate {
     @Override
-    public IsolationResult assertDEFAULT(Inventory actual, LostUpdateExpectOccur expectOccur) {
+    public IsolationResult assertDEFAULT(Ticket actual, LostUpdateExpectOccur expectOccur) {
         return notOccur(actual, expectOccur);
     }
 
     @Override
-    public IsolationResult assertREAD_UNCOMMITTED(Inventory actual, LostUpdateExpectOccur expectOccur) {
+    public IsolationResult assertREAD_UNCOMMITTED(Ticket actual, LostUpdateExpectOccur expectOccur) {
         return notOccur(actual, expectOccur);
     }
 
     @Override
-    public final IsolationResult assertREAD_COMMITTED(Inventory inventory, LostUpdateExpectOccur lostUpdateExpectOccur) {
+    public final IsolationResult assertREAD_COMMITTED(Ticket inventory, LostUpdateExpectOccur lostUpdateExpectOccur) {
         throw new UnsupportedOperationException("SQLite supports only TRANSACTION_SERIALIZABLE and TRANSACTION_READ_UNCOMMITTED.");
     }
 
     @Override
-    public final IsolationResult assertREPEATABLE_READ(Inventory inventory, LostUpdateExpectOccur lostUpdateExpectOccur) {
+    public final IsolationResult assertREPEATABLE_READ(Ticket inventory, LostUpdateExpectOccur lostUpdateExpectOccur) {
         throw new UnsupportedOperationException("SQLite supports only TRANSACTION_SERIALIZABLE and TRANSACTION_READ_UNCOMMITTED.");
     }
 }
