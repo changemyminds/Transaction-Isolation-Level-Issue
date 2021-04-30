@@ -39,6 +39,8 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
 //    runtimeOnly 'com.oracle.database.jdbc:ojdbc8'
     runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.34.0'
+    implementation 'com.github.gwenn:sqlite-dialect:0.1.2'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 

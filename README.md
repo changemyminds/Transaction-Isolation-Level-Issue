@@ -11,16 +11,11 @@
 
 ###  Database Setting
 
-Go to [here](src/main/resources/config/application.yml) to change your testing database type.
-```yaml
-spring:
-  profiles:
-    # h2 mysql postgresql sqlserver
-    active: h2
-```
-
-Go to [here](src/main/resources/config/database-setting.properties) to change your database setting if you custom your database ip or port.
+Go to [here](src/main/resources/config/database-setting.properties) to change your testing database type and  you can custom your database ip or port.
 ```properties
+# Database Type(h2 mysql postgresql sqlite sqlserver)
+database-type=h2
+
 # Change to your custom mysql ip or port
 mysql-ip=localhost
 mysql-port=3306
@@ -68,7 +63,7 @@ Version: **MySQL 5.7 InnoDB**
 | SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
 > - Isolation Level `DEFAULT` seems to be equal to `REPEATABLE_READ`.
-> - In the `Lost Update` problem, the `SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
+> - In the `Lost Update` problem, the `SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `LockAcquisitionException`.
 
 ---
 
@@ -85,7 +80,20 @@ Version: **PostgreSQL 13.2**
 | SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
 > - Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
-> - In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`
+> - In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `LockAcquisitionException`
+
+---
+
+### SQLite 
+
+| Isolation Level  | Dirty Read | Unrepeatable Read | Phantom Read | Lost Update |
+| ---------------- | ---------- | ----------------- | ------------ | ----------- |
+| DEFAULT          | not occur  | not occur         | not occur    | not occur   |
+| READ_UNCOMMITTED | not occur  | not occur         | not occur    | not occur   |
+| SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
+
+> - SQLite supports only `TRANSACTION_SERIALIZABLE` and `TRANSACTION_READ_UNCOMMITTED`.
+> - SQLite does not support concurrent writing, so you need to perform lock contention or retry writing.
 
 ---
 
@@ -102,7 +110,7 @@ Version: **Microsoft SQL Server 2019 (RTM-CU10) (KB5001090) - 15.0.4123.1 (X64)*
 | SERIALIZABLE     | not occur  | not occur         | not occur    | not occur   |
 
 > - Isolation Level `DEFAULT` seems to be equal to `READ_COMMITTED`.
-> -  In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `CannotAcquireLockException`.
+> -  In the `Lost Update` problem, the `REPEATABLE_READ`、`SERIALIZABLE` in Isolation Level must be retried with `@Retryable`; otherwise, it will throw `LockAcquisitionException`.
 
 ---
 

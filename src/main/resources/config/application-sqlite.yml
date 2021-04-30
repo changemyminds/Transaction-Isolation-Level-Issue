@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:./data/test-sqlite.db
+    driver-class-name: org.sqlite.JDBC
+    username: sa
+    password: password
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+logging:
+  config: classpath:log4j2-test.xml

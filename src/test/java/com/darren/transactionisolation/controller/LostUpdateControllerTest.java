@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit.jupiter.DisabledIf;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Isolation;
 
@@ -74,6 +75,7 @@ public class LostUpdateControllerTest extends BaseIsolationControllerTest {
     @Test
     @Order(3)
     @Override
+    @DisabledIf(expression = "#{environment.acceptsProfiles('sqlite')}", loadContext = true, reason = "SQLite supports only TRANSACTION_SERIALIZABLE and TRANSACTION_READ_UNCOMMITTED.")
     public void test_READ_COMMITTED() throws Exception {
         testLostUpdate(3, Isolation.READ_COMMITTED, lostUpdate::assertREAD_COMMITTED);
     }
@@ -81,6 +83,7 @@ public class LostUpdateControllerTest extends BaseIsolationControllerTest {
     @Test
     @Order(4)
     @Override
+    @DisabledIf(expression = "#{environment.acceptsProfiles('sqlite')}", loadContext = true, reason = "SQLite supports only TRANSACTION_SERIALIZABLE and TRANSACTION_READ_UNCOMMITTED.")
     public void test_REPEATABLE_READ() throws Exception {
         testLostUpdate(4, Isolation.REPEATABLE_READ, lostUpdate::assertREPEATABLE_READ);
     }

@@ -1,13 +1,14 @@
 package com.darren.transactionisolation.controller;
 
-import com.darren.transactionisolation.model.DirtyReadExpectOccur;
 import com.darren.transactionisolation.isolation.Account;
 import com.darren.transactionisolation.isolation.IsolationIssueDelegate;
 import com.darren.transactionisolation.isolation.dirtyread.BaseDirtyRead;
+import com.darren.transactionisolation.model.DirtyReadExpectOccur;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit.jupiter.DisabledIf;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Isolation;
 
@@ -77,6 +78,7 @@ public class DirtyReadControllerTest extends BaseIsolationControllerTest {
     @Test
     @Order(3)
     @Override
+    @DisabledIf(expression = "#{environment.acceptsProfiles('sqlite')}", loadContext = true, reason = "SQLite supports only TRANSACTION_SERIALIZABLE and TRANSACTION_READ_UNCOMMITTED.")
     public void test_READ_COMMITTED() throws Exception {
         testDirtyRead(3, Isolation.READ_COMMITTED, dirtyRead::assertREAD_COMMITTED);
     }
@@ -84,6 +86,7 @@ public class DirtyReadControllerTest extends BaseIsolationControllerTest {
     @Test
     @Order(4)
     @Override
+    @DisabledIf(expression = "#{environment.acceptsProfiles('sqlite')}", loadContext = true, reason = "SQLite supports only TRANSACTION_SERIALIZABLE and TRANSACTION_READ_UNCOMMITTED.")
     public void test_REPEATABLE_READ() throws Exception {
         testDirtyRead(4, Isolation.REPEATABLE_READ, dirtyRead::assertREPEATABLE_READ);
     }

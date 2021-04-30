@@ -32,7 +32,7 @@ public class SeedService {
 
     public void initGameTasks(boolean clear) {
         if (clear && gameTaskRepository.count() > 0) {
-            gameTaskRepository.truncate();
+            gameTaskRepository.deleteAll();
         }
 
         gameTaskRepository.save(GameTask.create("Darren", 900));
@@ -48,7 +48,7 @@ public class SeedService {
 
     public void initAccount(int amount, int count, boolean clear) {
         if (clear && accountRepository.count() > 0) {
-            accountRepository.truncate();
+            accountRepository.deleteAll();
         }
 
         createSeedCount(count, () -> accountRepository.save(createAccount()));
@@ -60,7 +60,7 @@ public class SeedService {
 
     public void initInventory(int quantity, int count, boolean clear) {
         if (clear && inventoryRepository.count() > 0) {
-            inventoryRepository.truncate();
+            inventoryRepository.deleteAll();
         }
 
         createSeedCount(count, () -> inventoryRepository.save(createInventory(quantity)));

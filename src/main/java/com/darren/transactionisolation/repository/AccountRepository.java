@@ -15,4 +15,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Modifying
     @Query(value = "truncate table account", nativeQuery = true)
     void truncate();
+
+    @Modifying
+    @Query(value = "VACUUM", nativeQuery = true)
+    void vacuum();
 }

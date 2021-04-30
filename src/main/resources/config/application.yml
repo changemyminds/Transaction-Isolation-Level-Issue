@@ -1,7 +1,7 @@
 spring:
   profiles:
-    # h2 mysql postgresql sqlserver
-    active: h2
+    # h2 mysql postgresql sqlite sqlserver
+    active: ${database-type:? You forget to set the database-type in database-setting.properties.}
 
   jpa:
     open-in-view: false

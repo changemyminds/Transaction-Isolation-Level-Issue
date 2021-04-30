@@ -15,4 +15,8 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Modifying
     @Query(value = "truncate table inventory", nativeQuery = true)
     void truncate();
+
+    @Modifying
+    @Query(value = "VACUUM", nativeQuery = true)
+    void vacuum();
 }

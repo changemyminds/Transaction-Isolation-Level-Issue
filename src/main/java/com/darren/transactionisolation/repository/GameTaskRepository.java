@@ -21,6 +21,14 @@ public interface GameTaskRepository extends JpaRepository<GameTask, Long> {
     void truncate();
 
     @Modifying
+//    @Query(value = "VACUUM", nativeQuery = true)
+    @Query(value = "DELETE FROM sqlite_sequence WHERE name = 'game_task';", nativeQuery = true)
+    void vacuum();
+
+//    delete from your_table;
+//delete from sqlite_sequence where name='your_table';
+
+    @Modifying
     @Query(value = "UPDATE game_task SET credit = credit + 1 WHERE score>=:score",
             nativeQuery = true)
     void updateCreditGreaterThan(@Param("score") Integer score);

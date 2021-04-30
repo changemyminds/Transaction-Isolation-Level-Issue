@@ -34,6 +34,12 @@ public class LostUpdateConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQLITE)
+    public BaseLostUpdate lostUpdateSqlite() {
+        return new LostUpdateSqlite();
+    }
+
+    @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQL_SERVER)
     public BaseLostUpdate lostUpdateSqlServer() {
         return new LostUpdateSqlServer();

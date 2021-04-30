@@ -34,6 +34,12 @@ public class DirtyReadConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQLITE)
+    public BaseDirtyRead dirtyReadSqlite() {
+        return new DirtyReadSqlite();
+    }
+
+    @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQL_SERVER)
     public BaseDirtyRead dirtyReadSqlServer() {
         return new DirtyReadSqlServer();

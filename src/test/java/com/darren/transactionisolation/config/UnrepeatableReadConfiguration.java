@@ -34,6 +34,12 @@ public class UnrepeatableReadConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQLITE)
+    public BaseUnrepeatableRead unrepeatableReadSqlite() {
+        return new UnrepeatableReadSqlite();
+    }
+
+    @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQL_SERVER)
     public BaseUnrepeatableRead unrepeatableReadSqlServer() {
         return new UnrepeatableReadSqlServer();

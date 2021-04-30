@@ -21,8 +21,8 @@ import java.util.function.Function;
  * Description:
  * Reference:
  */
-@TestPropertySource(locations = {"classpath:/config/database-setting.properties"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestPropertySource(locations = {"classpath:/config/database-setting.properties"})
 public abstract class BaseIsolationControllerTest extends BaseControllerTest implements IsolationOperate {
     private final Map<Isolation, String> resultMap = new LinkedHashMap<>();
 

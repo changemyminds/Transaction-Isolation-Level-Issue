@@ -5,6 +5,9 @@ import com.darren.transactionisolation.log.LogTopic;
 import com.darren.transactionisolation.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.TransactionException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +66,8 @@ public class UnrepeatableReadService extends BaseService {
         return inventory;
     }
 
+    // (SQLite) [SQLITE_BUSY]  The database file is locked (database is locked). So SQLite need retried it.
+    @Retryable(value = {TransactionException.class}, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional
     public void purchase(Long id, Integer quantity) {
         sleep(0.5);

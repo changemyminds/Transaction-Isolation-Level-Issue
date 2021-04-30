@@ -5,13 +5,13 @@ import com.darren.transactionisolation.log.LogTopic;
 import com.darren.transactionisolation.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.CannotAcquireLockException;
+import org.hibernate.TransactionException;
+import org.hibernate.exception.LockAcquisitionException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityNotFoundException;
 
 /**
@@ -26,11 +26,15 @@ import javax.persistence.EntityNotFoundException;
 public class LostUpdateService extends BaseService {
     private final InventoryRepository inventoryRepository;
 
+    // [SQLITE_BUSY]  The database file is locked (database is locked). So SQLite need retried it.
+    @Retryable(value = {TransactionException.class}, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional(isolation = Isolation.DEFAULT)
     public void sellItemDEFAULT(Long id, Integer itemCount, boolean isT1) {
         sellItem(id, itemCount, isT1);
     }
 
+    // [SQLITE_BUSY]  The database file is locked (database is locked). So SQLite need retried it.
+    @Retryable(value = {TransactionException.class}, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public void sellItemREAD_UNCOMMITTED(Long id, Integer itemCount, boolean isT1) {
         sellItem(id, itemCount, isT1);
@@ -41,14 +45,16 @@ public class LostUpdateService extends BaseService {
         sellItem(id, itemCount, isT1);
     }
 
-    // @Retryable is used in MySQL LostUpdate
-    @Retryable(value = CannotAcquireLockException.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
+    // (Postgresql) LockAcquisitionException: Deadlock found when trying to get lock; try restarting transaction
+    @Retryable(value = LockAcquisitionException.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void sellItemREPEATABLE_READ(Long id, Integer itemCount, boolean isT1) {
         sellItem(id, itemCount, isT1);
     }
 
-    @Retryable(value = CannotAcquireLockException.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
+    // (MySQL、Postgresql) LockAcquisitionException: Deadlock found when trying to get lock; try restarting transaction
+    // [SQLITE_BUSY]  The database file is locked (database is locked). So SQLite need retried it.
+    @Retryable(value = {LockAcquisitionException.class, TransactionException.class}, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void sellItemSERIALIZABLE(Long id, Integer itemCount, boolean isT1) {
         sellItem(id, itemCount, isT1);

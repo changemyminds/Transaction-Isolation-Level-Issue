@@ -34,6 +34,12 @@ public class PhantomReadConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQLITE)
+    public BasePhantomRead phantomReadSqlite() {
+        return new PhantomReadSqlite();
+    }
+
+    @Bean
     @ConditionalOnProperty(prefix = SpringProfile.PREFIX, name = SpringProfile.NAME, havingValue = DatabaseType.SQL_SERVER)
     public BasePhantomRead phantomReadSqlServer() {
         return new PhantomReadSqlServer();
